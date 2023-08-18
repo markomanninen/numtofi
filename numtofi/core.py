@@ -22,16 +22,16 @@ def number_to_word(n, space=False):
 	- http://users.jyu.fi/~pamakine/kieli/suomi/numeraalit/numerot.html
 
     Parameters:
-    - n (int): The number to convert. Must be a positive integer.
+    - n (int): The number to convert. Must be a positive integer less than 10^18.
     - space (bool): If True, add a space between words. Default is False.
 
     Returns:
     - str: The textual representation of the number in Finnish.
     """
 
-	# Check that the given number is a positive integer.
-    if not isinstance(n, int) or n < 0:
-        raise ValueError("The provided number must be a positive integer.")
+	# Check that the given number is a positive integer less than quintillion.
+	if not isinstance(n, int) or n < 0 or n >= 1000000000000000000:
+        raise ValueError("Number must be a positive integer less than 10^18.")
 
     # Handle zero
     if n == 0:
