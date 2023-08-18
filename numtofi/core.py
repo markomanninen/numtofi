@@ -22,12 +22,17 @@ def number_to_word(n, space=False):
 	- http://users.jyu.fi/~pamakine/kieli/suomi/numeraalit/numerot.html
 
     Parameters:
-    - n (int): The number to convert.
+    - n (int): The number to convert. Must be a positive integer.
     - space (bool): If True, add a space between words. Default is False.
 
     Returns:
     - str: The textual representation of the number in Finnish.
     """
+
+	# Check that the given number is a positive integer.
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("The provided number must be a positive integer.")
+
     # Handle zero
     if n == 0:
         return "nolla"

@@ -4,12 +4,16 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Convert a number to its Finnish textual representation.")
-    parser.add_argument('number', type=int, help='Number to convert.')
-    parser.add_argument('--space', action='store_true', help='Add a space between words.')
+    parser.add_argument('number', type=int, help='The number to convert. Must be a positive integer.')
+    parser.add_argument('--space', action='store_true', help='If set, adds a space between words.')
 
     args = parser.parse_args()
 
-    print(number_to_word(args.number, args.space))
+    try:
+        result = number_to_word(args.number, args.space)
+        print(result)
+    except ValueError as e:
+        print(e)
 
 if __name__ == "__main__":
     main()
