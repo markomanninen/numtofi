@@ -19,7 +19,7 @@ def number_to_word(n, space=False):
     Convert a number into its Finnish textual representation.
     See for format recommendations:
     - https://www.kielikello.fi/-/luvut-ja-tekstin-hahmotettavuus
-	- http://users.jyu.fi/~pamakine/kieli/suomi/numeraalit/numerot.html
+    - http://users.jyu.fi/~pamakine/kieli/suomi/numeraalit/numerot.html
 
     Parameters:
     - n (int): The number to convert. Must be a positive integer less than 10^18.
@@ -29,8 +29,8 @@ def number_to_word(n, space=False):
     - str: The textual representation of the number in Finnish.
     """
 
-	# Check that the given number is a positive integer less than quintillion.
-	if not isinstance(n, int) or n < 0 or n >= 1000000000000000000:
+    # Check that the given number is a positive integer less than quintillion.
+    if not isinstance(n, int) or n < 0 or n >= 1000000000000000000:
         raise ValueError("Number must be a positive integer less than 10^18.")
 
     # Handle zero
