@@ -73,11 +73,26 @@ class TestNumToFiCore(unittest.TestCase):
             9000000000: ('yhdeksänmiljardia', 'yhdeksän miljardia'),
             1000000000000: ('biljoona', 'biljoona'),
             1000000000000000: ('triljoona', 'triljoona'),
+
+            # Maximum number
+            999999999999999999: ('yhdeksänsataayhdeksänkymmentäyhdeksäntriljoonaayhdeksänsataayhdeksänkymmentäyhdeksänbiljoonaayhdeksänsataayhdeksänkymmentäyhdeksänmiljardiayhdeksänsataayhdeksänkymmentäyhdeksänmiljoonaayhdeksänsataayhdeksänkymmentäyhdeksäntuhattayhdeksänsataayhdeksänkymmentäyhdeksän', 'yhdeksänsataayhdeksänkymmentäyhdeksäntriljoonaa yhdeksänsataayhdeksänkymmentäyhdeksänbiljoonaa yhdeksänsataayhdeksänkymmentäyhdeksänmiljardia yhdeksänsataayhdeksänkymmentäyhdeksänmiljoonaa yhdeksänsataayhdeksänkymmentäyhdeksäntuhatta yhdeksänsataayhdeksänkymmentäyhdeksän'),
         }
 
         for num, (no_space, with_space) in tests.items():
             assert(number_to_word(num) == no_space)
             assert(number_to_word(num, True) == with_space)
+
+    def test_number_to_word_errors(self):
+        
+        try:
+            number_to_word(-1)
+        except ValueError as e:
+            assert(e == 'Number must be a positive integer less than 10^18.')
+
+        try:
+            number_to_word(1000000000000000000)
+        except ValueError as e:
+            assert(e == 'Number must be a positive integer less than 10^18.')
 
 if __name__ == '__main__':
     unittest.main()
