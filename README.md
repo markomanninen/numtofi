@@ -49,6 +49,16 @@ Tests are provided in the `tests` directory. To run the tests:
 python -m unittest discover tests
 ```
 
+## Update PYPI package
+
+```bash
+python setup.py sdist bdist_wheel
+```
+
+```bash
+python -m twine upload dist/*
+```
+
 ## Contributing
 
 Contributions are welcome! Please make sure to update tests as appropriate when proposing changes.
