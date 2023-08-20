@@ -10,7 +10,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        result = number_to_word(args.number, !args.nospaces)
+        result = number_to_word(args.number, not args.nospaces)
         print(result)
     except ValueError as e:
         print(e)
