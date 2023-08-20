@@ -1,3 +1,44 @@
+"""
+numtofi.core Submodule
+
+Constants:
+- one_to_ten: List containing numbers 1-10 in Finnish.
+- powers_of_ten: Dictionary defining large numbers, such as hundred, thousand, million, etc., in Finnish.
+
+Main Function:
+- number_to_word(n, space=True):
+  - Description: Converts a number into its Finnish textual representation.
+  - Parameters:
+    - n (int): The number to convert. Must be a positive integer less than 10^18.
+    - space (bool): If False, removes spaces between words. Default is True.
+  - Returns: The textual representation of the number in Finnish.
+  - Errors: If the given number is not a positive integer or it's greater than or equal to 10^18, the function raises a ValueError.
+
+Usage Example:
+
+from numtofi import number_to_word
+
+# Convert a number to Finnish without spaces
+number = 12345
+textual_representation = number_to_word(number)
+print(textual_representation)  # Expected output: "kaksitoistatuhatta kolmesataaneljäkymmentäviisi"
+
+# Convert a number to Finnish without spaces
+textual_representation_no_spaces = ntf.number_to_word(number, space=False)
+print(textual_representation_no_spaces)  # Expected output: "kaksitoistatuhattakolmesataaneljäkymmentäviisi"
+
+# Handling errors
+try:
+    large_number = 10**18
+    ntf.number_to_word(large_number)
+except ValueError as e:
+    print(f"Error: {e}")  # Expected output: "Error: Number must be a positive integer less than 10^18."
+
+"""
+
+MIN_SUPPORT = 0
+MAX_SUPPORT = 10**18
+
 # The first nine numbers 1-9 (yksi to yhdeksän) that will repeat in all written numbers.
 one_to_ten = [
     # The first index is left for zero but written as empty string to the end of the numbers in certain cases.
@@ -14,7 +55,7 @@ powers_of_ten = {
     1000000000000000: 'triljoona'
 }
 
-def number_to_word(n, space=False):
+def number_to_word(n, space=True):
     """
     Convert a number into its Finnish textual representation.
     See for format recommendations:
@@ -23,14 +64,14 @@ def number_to_word(n, space=False):
 
     Parameters:
     - n (int): The number to convert. Must be a positive integer less than 10^18.
-    - space (bool): If True, add a space between words. Default is False.
+    - space (bool): If False, removes spaces between words. Default is True.
 
     Returns:
     - str: The textual representation of the number in Finnish.
     """
 
     # Check that the given number is a positive integer less than quintillion.
-    if not isinstance(n, int) or n < 0 or n >= 1000000000000000000:
+    if not isinstance(n, int) or n < MIN_SUPPORT or n >= MAX_SUPPORT:
         raise ValueError("Number must be a positive integer less than 10^18.")
 
     # Handle zero

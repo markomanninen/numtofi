@@ -79,20 +79,23 @@ class TestNumToFiCore(unittest.TestCase):
         }
 
         for num, (no_space, with_space) in tests.items():
-            assert(number_to_word(num) == no_space)
-            assert(number_to_word(num, True) == with_space)
+            assert(number_to_word(num) == with_space)
+            assert(number_to_word(num, False) == no_space)
 
     def test_number_to_word_errors(self):
-        
-        try:
-            number_to_word(-1)
-        except ValueError as e:
-            assert(e == 'Number must be a positive integer less than 10^18.')
 
+        v = -1
         try:
-            number_to_word(1000000000000000000)
+            number_to_word(v)
         except ValueError as e:
-            assert(e == 'Number must be a positive integer less than 10^18.')
+            assert(f'{e}' == 'Number must be a positive integer less than 10^18.')
+
+        # 10^18
+        v = 1000000000000000000
+        try:
+            number_to_word(v)
+        except ValueError as e:
+            assert(f'{e}' == 'Number must be a positive integer less than 10^18.')
 
 if __name__ == '__main__':
     unittest.main()

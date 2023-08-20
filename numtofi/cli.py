@@ -5,7 +5,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Convert a number to its Finnish textual representation.")
     parser.add_argument('number', type=int, help='The number to convert. Must be a positive integer.')
-    parser.add_argument('--space', action='store_true', help='If set, adds a space between words.')
+    parser.add_argument('--nospace', action='store_true', help='If set, removes spaces between words.')
 
     args = parser.parse_args()
 

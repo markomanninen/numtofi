@@ -25,18 +25,19 @@ After installation, you can use the `numtofi` command directly from your termina
 ```bash
 $ numtofi 45
 neljäkymmentäviisi
-```
 
-```bash
-$ numtofi 5000000 --space
+$ numtofi 5000000
 viisi miljoonaa
+
+$ numtofi 5000000 --nospace
+viisimiljoonaa
 ```
 
 ## Parameters
 
 - `number_to_word(n, space=False)`:
   - `n (int)`: The number to convert.
-  - `space (bool)`: If `True`, add a space between words. Default is `False`.
+  - `space (bool)`: If `False`, removes spaces between words. Default is `True`.
 
 ## Testing
 
