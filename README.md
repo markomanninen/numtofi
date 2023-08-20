@@ -29,15 +29,15 @@ neljäkymmentäviisi
 $ numtofi 5000000
 viisi miljoonaa
 
-$ numtofi 5000000 --nospace
+$ numtofi 5000000 --nospaces
 viisimiljoonaa
 ```
 
 ## Parameters
 
-- `number_to_word(n, space=False)`:
+- `number_to_word(n, spaces=False)`:
   - `n (int)`: The number to convert.
-  - `space (bool)`: If `False`, removes spaces between words. Default is `True`.
+  - `spaces (bool)`: If `False`, removes spaces between words. Default is `True`.
 
 ## Testing
 

@@ -6,11 +6,11 @@ Constants:
 - powers_of_ten: Dictionary defining large numbers, such as hundred, thousand, million, etc., in Finnish.
 
 Main Function:
-- number_to_word(n, space=True):
+- number_to_word(n, spaces=True):
   - Description: Converts a number into its Finnish textual representation.
   - Parameters:
     - n (int): The number to convert. Must be a positive integer less than 10^18.
-    - space (bool): If False, removes spaces between words. Default is True.
+    - spaces (bool): If False, removes spaces between words. Default is True.
   - Returns: The textual representation of the number in Finnish.
   - Errors: If the given number is not a positive integer or it's greater than or equal to 10^18, the function raises a ValueError.
 
@@ -24,13 +24,13 @@ textual_representation = number_to_word(number)
 print(textual_representation)  # Expected output: "kaksitoistatuhatta kolmesataaneljäkymmentäviisi"
 
 # Convert a number to Finnish without spaces
-textual_representation_no_spaces = ntf.number_to_word(number, space=False)
+textual_representation_no_spaces = number_to_word(number, spaces=False)
 print(textual_representation_no_spaces)  # Expected output: "kaksitoistatuhattakolmesataaneljäkymmentäviisi"
 
 # Handling errors
 try:
     large_number = 10**18
-    ntf.number_to_word(large_number)
+    number_to_word(large_number)
 except ValueError as e:
     print(f"Error: {e}")  # Expected output: "Error: Number must be a positive integer less than 10^18."
 
@@ -55,7 +55,7 @@ powers_of_ten = {
     1000000000000000: 'triljoona'
 }
 
-def number_to_word(n, space=True):
+def number_to_word(n, spaces=True):
     """
     Convert a number into its Finnish textual representation.
     See for format recommendations:
@@ -64,7 +64,7 @@ def number_to_word(n, space=True):
 
     Parameters:
     - n (int): The number to convert. Must be a positive integer less than 10^18.
-    - space (bool): If False, removes spaces between words. Default is True.
+    - spaces (bool): If False, removes spaces between words. Default is True.
 
     Returns:
     - str: The textual representation of the number in Finnish.
@@ -103,16 +103,16 @@ def number_to_word(n, space=True):
             next_number = _number_to_word(n % max_power)
             # Special case: "tuhat" becomes "tuhatta"
             if max_power == 1000:
-                separator = " " if space else ""
+                separator = " " if spaces else ""
                 affix = "ta"
             # Suffix "-a" is added to numbers like "sata" -> "sataa", "miljoona" -> "miljoonaa",...
             else:
                 # Add a space after every power of a thousand.
-                separator = " " if space and (max_power % 1000) == 0 else ""
+                separator = " " if spaces and (max_power % 1000) == 0 else ""
                 affix = "a"
                 # one more special case for plain millions, billions etc.
                 # "viisi miljoonaa" and "viisimiljoonaa viisi" are preferred formats
-                if space and next_number == "" and n > 999999:
+                if spaces and next_number == "" and n > 999999:
                     prefix += " "
             return (prefix + powers_of_ten[max_power] + affix + separator + next_number).strip()
 

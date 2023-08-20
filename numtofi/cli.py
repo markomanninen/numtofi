@@ -5,12 +5,12 @@ def main():
 
     parser = argparse.ArgumentParser(description="Convert a number to its Finnish textual representation.")
     parser.add_argument('number', type=int, help='The number to convert. Must be a positive integer.')
-    parser.add_argument('--nospace', action='store_true', help='If set, removes spaces between words.')
+    parser.add_argument('--nospaces', action='store_true', help='If set, removes spaces between words.')
 
     args = parser.parse_args()
 
     try:
-        result = number_to_word(args.number, args.space)
+        result = number_to_word(args.number, !args.nospaces)
         print(result)
     except ValueError as e:
         print(e)
