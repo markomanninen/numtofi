@@ -18,7 +18,7 @@ Usage Example:
 
 from numtofi import number_to_word
 
-# Convert a number to Finnish without spaces
+# Convert a number to Finnish with spaces
 number = 12345
 textual_representation = number_to_word(number)
 print(textual_representation)  # Expected output: "kaksitoistatuhatta kolmesataaneljäkymmentäviisi"
