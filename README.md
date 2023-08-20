@@ -13,9 +13,9 @@ pip install numtofi
 ### As a Python Module
 
 ```python
-from numtofi import number_to_word
+from numtofi import number_to_text
 
-print(number_to_word(45))  # Outputs "neljäkymmentäviisi"
+print(number_to_text(45))  # Outputs "neljäkymmentäviisi"
 ```
 
 ### Command-Line Interface (CLI)
@@ -35,7 +35,7 @@ viisimiljoonaa
 
 ## Parameters
 
-- `number_to_word(n, spaces=False)`:
+- `number_to_text(n, spaces=False)`:
   - `n (int)`: The number to convert.
   - `spaces (bool)`: If `False`, removes spaces between words. Default is `True`.
 

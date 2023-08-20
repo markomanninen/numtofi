@@ -1,4 +1,4 @@
-from .core import number_to_word
+from .core import number_to_text
 
 def main():
     import argparse
@@ -10,7 +10,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        result = number_to_word(args.number, not args.nospaces)
+        result = number_to_text(args.number, not args.nospaces)
         print(result)
     except ValueError as e:
         print(e)

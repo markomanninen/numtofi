@@ -1,9 +1,9 @@
-from numtofi import number_to_word
+from numtofi import number_to_text
 import unittest
 
 class TestNumToFiCore(unittest.TestCase):
 
-    def test_number_to_word(self):
+    def test_number_to_text(self):
         tests = {
             # Base numbers
             0: ('nolla', 'nolla'),
@@ -79,21 +79,21 @@ class TestNumToFiCore(unittest.TestCase):
         }
 
         for num, (no_space, with_space) in tests.items():
-            assert(number_to_word(num) == with_space)
-            assert(number_to_word(num, False) == no_space)
+            assert(number_to_text(num) == with_space)
+            assert(number_to_text(num, False) == no_space)
 
-    def test_number_to_word_errors(self):
+    def test_number_to_text_errors(self):
 
         v = -1
         try:
-            number_to_word(v)
+            number_to_text(v)
         except ValueError as e:
             assert(f'{e}' == 'Number must be a positive integer less than 10^18.')
 
         # 10^18
         v = 1000000000000000000
         try:
-            number_to_word(v)
+            number_to_text(v)
         except ValueError as e:
             assert(f'{e}' == 'Number must be a positive integer less than 10^18.')
 

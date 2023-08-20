@@ -6,7 +6,7 @@ Constants:
 - powers_of_ten: Dictionary defining large numbers, such as hundred, thousand, million, etc., in Finnish.
 
 Main Function:
-- number_to_word(n, spaces=True):
+- number_to_text(n, spaces=True):
   - Description: Converts a number into its Finnish textual representation.
   - Parameters:
     - n (int): The number to convert. Must be a positive integer less than 10^18.
@@ -16,21 +16,21 @@ Main Function:
 
 Usage Example:
 
-from numtofi import number_to_word
+from numtofi import number_to_text
 
 # Convert a number to Finnish with spaces
 number = 12345
-textual_representation = number_to_word(number)
+textual_representation = number_to_text(number)
 print(textual_representation)  # Expected output: "kaksitoistatuhatta kolmesataaneljäkymmentäviisi"
 
 # Convert a number to Finnish without spaces
-textual_representation_no_spaces = number_to_word(number, spaces=False)
+textual_representation_no_spaces = number_to_text(number, spaces=False)
 print(textual_representation_no_spaces)  # Expected output: "kaksitoistatuhattakolmesataaneljäkymmentäviisi"
 
 # Handling errors
 try:
     large_number = 10**18
-    number_to_word(large_number)
+    number_to_text(large_number)
 except ValueError as e:
     print(f"Error: {e}")  # Expected output: "Error: Number must be a positive integer less than 10^18."
 
@@ -55,7 +55,7 @@ powers_of_ten = {
     1000000000000000: 'triljoona'
 }
 
-def number_to_word(n, spaces=True):
+def number_to_text(n, spaces=True):
     """
     Convert a number into its Finnish textual representation.
     See for format recommendations:
@@ -79,7 +79,7 @@ def number_to_word(n, spaces=True):
         return "nolla"
 
     # Main recursive function
-    def _number_to_word(n):
+    def _number_to_text(n):
         # "Zero" does not appear in number words.
         # Numbers from 1 to 9 are base for all numbers in the finnish base 10 number systems.
         if n < 11:
@@ -97,10 +97,10 @@ def number_to_word(n, spaces=True):
             # First power numbers don't need repetition e.g., "sata, tuhat, miljoona..."
             if n // max_power == 1:
                 # No spaces.
-                return (powers_of_ten[max_power] + _number_to_word(n % max_power)).strip()
+                return (powers_of_ten[max_power] + _number_to_text(n % max_power)).strip()
 
-            prefix = _number_to_word(n // max_power)
-            next_number = _number_to_word(n % max_power)
+            prefix = _number_to_text(n // max_power)
+            next_number = _number_to_text(n % max_power)
             # Special case: "tuhat" becomes "tuhatta"
             if max_power == 1000:
                 separator = " " if spaces else ""
@@ -116,4 +116,4 @@ def number_to_word(n, spaces=True):
                     prefix += " "
             return (prefix + powers_of_ten[max_power] + affix + separator + next_number).strip()
 
-    return _number_to_word(n)
+    return _number_to_text(n)
