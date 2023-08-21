@@ -59,18 +59,6 @@ powers_of_ten = {
     1000000000000000: 'triljoona'
 }
 
-# Pre-calculated lengths
-TA_LENGTH = len("ta")
-A_LENGTH = len("a")
-NOLLA_LENGTH = len("nolla")
-
-# Lengths for number from 0 to 999.
-one_to_ten_lengths = {n: len(number_to_text(n)) for n in range(1, 1000)}
-one_to_ten_lengths[0] = 0
-
-# Length of powers of ten.
-powers_of_ten_lengths = {key: len(value) for key, value in powers_of_ten.items()}
-
 def number_to_text(n, spaces=True):
     """
     Convert a number into its Finnish textual representation.
@@ -133,6 +121,18 @@ def number_to_text(n, spaces=True):
             return (prefix + powers_of_ten[max_power] + affix + separator + next_number).strip()
 
     return _number_to_text(n)
+
+# Pre-calculated lengths
+TA_LENGTH = len("ta")
+A_LENGTH = len("a")
+NOLLA_LENGTH = len("nolla")
+
+# Lengths for number from 0 to 999.
+one_to_ten_lengths = {n: len(number_to_text(n)) for n in range(1, 1000)}
+one_to_ten_lengths[0] = 0
+
+# Length of powers of ten.
+powers_of_ten_lengths = {key: len(value) for key, value in powers_of_ten.items()}
 
 def number_to_text_length(n, spaces=True):
     """
