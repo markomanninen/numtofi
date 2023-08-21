@@ -16,7 +16,7 @@ Main Function:
 
 Usage Example:
 
-from numtofi import number_to_text
+from numtofi import number_to_text, number_to_text_length
 
 # Convert a number to Finnish with spaces
 number = 12345
@@ -26,6 +26,10 @@ print(textual_representation)  # Expected output: "kaksitoistatuhatta kolmesataa
 # Convert a number to Finnish without spaces
 textual_representation_no_spaces = number_to_text(number, spaces=False)
 print(textual_representation_no_spaces)  # Expected output: "kaksitoistatuhattakolmesataaneljäkymmentäviisi"
+
+# Find the length of the number's textual representation
+textual_representation_length = number_to_text_length(number)
+print(textual_representation_length)  # Expected output: "47"
 
 # Handling errors
 try:
@@ -54,6 +58,18 @@ powers_of_ten = {
     1000000000000: 'biljoona',
     1000000000000000: 'triljoona'
 }
+
+# Pre-calculated lengths
+TA_LENGTH = len("ta")
+A_LENGTH = len("a")
+NOLLA_LENGTH = len("nolla")
+
+# Lengths for number from 0 to 999.
+one_to_ten_lengths = {n: len(number_to_text(n)) for n in range(1, 1000)}
+one_to_ten_lengths[0] = 0
+
+# Length of powers of ten.
+powers_of_ten_lengths = {key: len(value) for key, value in powers_of_ten.items()}
 
 def number_to_text(n, spaces=True):
     """
@@ -117,3 +133,64 @@ def number_to_text(n, spaces=True):
             return (prefix + powers_of_ten[max_power] + affix + separator + next_number).strip()
 
     return _number_to_text(n)
+
+def number_to_text_length(n, spaces=True):
+    """
+    Calculate the number of letters in the Finnish textual representation of a number
+    using optimized approach with while loop instead of recursion.
+
+    Parameters:
+    - n (int): The number to convert. Must be a positive integer less than 10^18.
+    - spaces (bool): Whether to include spaces in the count.
+
+    Returns:
+    - int: The number of letters in the textual representation of the number in Finnish.
+    """
+
+    # Check that the given number is a positive integer less than quintillion.
+    if not isinstance(n, int) or n < MIN_SUPPORT or n >= MAX_SUPPORT:
+        raise ValueError("Number must be a positive integer less than 10^18.")
+
+    # Handle zero
+    if n == 0:
+        return NOLLA_LENGTH
+
+    # Initialize the result
+    result = 0
+
+    # Use a stack to keep track of numbers to process
+    stack = [n]
+
+    while stack:
+        current_n = stack.pop()
+
+        # Number from 0 to 999 have already been calculated to the dictionary
+        # since they repeat in all scales
+        if current_n < 1000:
+            result += one_to_ten_lengths[current_n]
+        else:
+            max_power = max(power for power in powers_of_ten_lengths if power <= current_n)
+            max_power_n = current_n // max_power
+            max_power_m = current_n % max_power
+
+            if max_power_n == 1:
+                result += powers_of_ten_lengths[max_power]
+                stack.append(max_power_m)
+            else:
+                prefix = one_to_ten_lengths[max_power_n]
+                next_number = max_power_m
+                if max_power == 1000:
+                    separator = 1 if spaces else 0
+                    affix = TA_LENGTH
+                else:
+                    separator = 1 if spaces and (max_power % 1000) == 0 else 0
+                    affix = A_LENGTH
+                    if spaces and next_number == 0 and current_n > 999999:
+                        prefix += 1
+                if next_number == 0:
+                    separator = 0
+
+                result += prefix + powers_of_ten_lengths[max_power] + affix + separator
+                stack.append(next_number)
+
+    return result

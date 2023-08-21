@@ -31,12 +31,20 @@ viisi miljoonaa
 
 $ numtofi 5000000 --nospaces
 viisimiljoonaa
+
+$ numtofi 5000000 --length
+15
+
 ```
 
 ## Parameters
 
 - `number_to_text(n, spaces=False)`:
   - `n (int)`: The number to convert.
+  - `spaces (bool)`: If `False`, removes spaces between words. Default is `True`.
+
+- `number_to_text_length(n, spaces=False)`:
+  - `n (int)`: The number to the length of the textual representation.
   - `spaces (bool)`: If `False`, removes spaces between words. Default is `True`.
 
 ## Testing
