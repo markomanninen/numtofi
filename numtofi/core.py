@@ -60,8 +60,87 @@ powers_of_ten = {
 }
 
 def number_to_text(n, spaces=True):
+    """Calculate the number of letters in the Finnish textual representation of a number using further optimized approach.
+    Parameters:
+    - n (int): The number to convert. Must be a positive integer less than 10^18.
+    - spaces (bool): Whether to include spaces in the count.
+    Returns:
+    - int: The number of letters in the textual representation of the number in Finnish.
     """
-    Convert a number into its Finnish textual representation.
+
+    # Check that the given number is a positive integer less than quintillion.
+    if not isinstance(n, int) or n < MIN_SUPPORT or n >= MAX_SUPPORT:
+        raise ValueError("Number must be a positive integer less than 10^18.")
+
+    # Handle zero
+    if n == 0:
+        return "nolla"
+
+    # Initialize the result
+    result = ""
+
+    # Use a stack to keep track of numbers to process
+    stack = [n]
+
+    def _prefix(x):
+        # Ones
+        if x < 11:
+            prefix = one_to_ten[x]
+        # Teens
+        elif x < 20:
+            prefix = one_to_ten[x-10]+'toista'
+        # Tens
+        elif x < 100:
+            prefix = one_to_ten[x//10]+'kymmentä'+one_to_ten[x%10]
+        # Hundreds
+        else:
+            # First hundred
+            if x < 200:
+                prefix = 'sata'
+                n = (x-100)
+            # 200-900
+            else:
+                prefix = one_to_ten[x//100]+'sataa'
+                n = x % 100
+            # Rest of the hundred
+            prefix += _prefix(n)
+        return prefix
+
+    while stack:
+        current_n = stack.pop()
+        # Numbers under thousand
+        if current_n < 1000:
+            result += _prefix(current_n)
+        else:
+            max_power = max(power for power in powers_of_ten if power <= current_n)
+            max_power_n = current_n // max_power
+            next_number = current_n % max_power
+
+            if max_power_n == 1:
+                result += powers_of_ten[max_power]
+                stack.append(next_number)
+            else:
+                prefix = _prefix(max_power_n)
+                if max_power == 1000:
+                    separator = " " if spaces else ""
+                    affix = "ta"
+                else:
+                    separator = " " if spaces and (max_power % 1000) == 0 else ""
+                    affix = "a"
+                    if spaces and next_number == 0 and current_n > 999999:
+                        prefix += " "
+
+                if next_number == 0:
+                    separator = ""
+
+                result += prefix + powers_of_ten[max_power] + affix + separator
+                stack.append(next_number)
+
+    return result
+
+def number_to_text_rec(n, spaces=True):
+    """
+    Convert a number into its Finnish textual representation. Recrusive version.
     See for format recommendations:
     - https://www.kielikello.fi/-/luvut-ja-tekstin-hahmotettavuus
     - http://users.jyu.fi/~pamakine/kieli/suomi/numeraalit/numerot.html
