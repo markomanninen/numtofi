@@ -43,7 +43,7 @@ This project also includes a client-side Single Page Application (SPA) that can 
 
 **How to use:**
 
-1.  Navigate to the GitHub Pages URL for this repository (e.g., `https://<your-username>.github.io/<repository-name>/`).
+1.  Navigate to the GitHub Pages URL for this repository: `https://markomanninen.github.io/numtofi/`.
 2.  Enter a number in the input field.
 3.  Click the "Convert" button.
 4.  The Finnish textual representation of the number will be displayed below the button.

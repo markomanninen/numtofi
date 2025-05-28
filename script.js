@@ -128,37 +128,62 @@ document.addEventListener('DOMContentLoaded', () => {
     const convertButton = document.getElementById('convertButton');
     const resultDiv = document.getElementById('result');
 
-    if (convertButton && numberInput && resultDiv) {
-        convertButton.addEventListener('click', () => {
-            const inputValue = numberInput.value.trim();
-
-            if (inputValue === "") {
-                resultDiv.textContent = ""; // Clear result if input is empty
-                return;
-            }
-
-            // Validate input: must be a string representing a non-negative integer.
-            // Python version handles positive integers; 0 is "nolla".
-            if (!/^\d+$/.test(inputValue)) { // Allows only digits, no negative sign here based on MIN_SUPPORT=0
-                 resultDiv.textContent = "Virhe: Syötä positiivinen kokonaisluku (esim. 123).";
-                 return;
-            }
-
-            const number = parseInt(inputValue, 10);
-
-            // Check if parseInt failed (e.g. for extremely large strings not fitting JS int limits before MAX_SUPPORT)
-            // or if the number is outside the supported range of numberToTextJS.
-            if (isNaN(number)) { // Should not happen if regex passed, but as a safeguard
-                 resultDiv.textContent = "Virhe: Syötetty arvo ei ole kelvollinen numero.";
-                 return;
-            }
-            
-            // Call the conversion function (which has its own range validation)
-            const finnishText = numberToTextJS(number, true); // Default to spaces = true
-            resultDiv.textContent = finnishText;
-        });
-    } else {
-        console.error("Error: One or more HTML elements (numberInput, convertButton, result) not found.");
-        if(resultDiv) resultDiv.textContent = "Virhe: Sivun tarvittavia osia ei löytynyt.";
+    if (!numberInput || !convertButton || !resultDiv) {
+        console.error("Error: Essential HTML elements (numberInput, convertButton, or resultDiv) not found.");
+        if(resultDiv) resultDiv.textContent = "Virhe: Sivun tarvittavia osia ei löytynyt."; // Attempt to show error on page
+        return;
     }
+
+    function validateAndConvert() {
+        const inputValue = numberInput.value.trim();
+
+        if (inputValue === "") {
+            resultDiv.textContent = ""; // Clear result if input is empty
+            return;
+        }
+
+        // Validate if the input is a non-negative integer string
+        if (!/^\d+$/.test(inputValue)) {
+            resultDiv.textContent = "Invalid input: Please enter a whole number.";
+            return;
+        }
+
+        // Parse the string to an integer.
+        // Using BigInt for parsing to correctly handle numbers up to MAX_SUPPORT before comparison.
+        // Number() or parseInt() can lose precision for very large numbers.
+        let number;
+        try {
+            number = BigInt(inputValue);
+        } catch (e) {
+            resultDiv.textContent = "Invalid input: Number is too large to parse.";
+            return;
+        }
+        
+        // Check if the number is within MIN_SUPPORT and MAX_SUPPORT
+        // numberToTextJS expects a Number type, so we convert back after range check if valid.
+        // MAX_SUPPORT is 10^18, so valid numbers are 0 to 10^18 - 1.
+        if (number < MIN_SUPPORT || number >= BigInt(MAX_SUPPORT)) {
+            const maxDisplay = (BigInt(MAX_SUPPORT) - BigInt(1)).toLocaleString('en-US'); // For "999,..."
+            resultDiv.textContent = `Number out of range (${MIN_SUPPORT} - ${maxDisplay}).`;
+            return;
+        }
+
+        // Convert BigInt to Number for numberToTextJS, as it's within safe integer limits now
+        const numberAsJSNumber = Number(number);
+
+        try {
+            // Call the conversion function
+            const finnishText = numberToTextJS(numberAsJSNumber, true); // Default to spaces = true
+            resultDiv.textContent = finnishText;
+        } catch (e) {
+            // This might catch errors from numberToTextJS if any slip through primary validation
+            console.error("Error during conversion:", e);
+            resultDiv.textContent = "Error during conversion. Please check the number.";
+        }
+    }
+
+    // Attach event listeners
+    convertButton.addEventListener('click', validateAndConvert);
+    numberInput.addEventListener('input', validateAndConvert);
+
 });
