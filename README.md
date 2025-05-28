@@ -37,6 +37,19 @@ $ numtofi 5000000 --length
 
 ```
 
+### GitHub SPA Interface
+
+This project also includes a client-side Single Page Application (SPA) that can be used to convert numbers to Finnish text directly in your browser.
+
+**How to use:**
+
+1.  Navigate to the GitHub Pages URL for this repository (e.g., `https://<your-username>.github.io/<repository-name>/`).
+2.  Enter a number in the input field.
+3.  Click the "Convert" button.
+4.  The Finnish textual representation of the number will be displayed below the button.
+
+This provides a user-friendly graphical interface for the `numtofi` functionality.
+
 ## Parameters
 
 - `number_to_text(n, spaces=False)`:

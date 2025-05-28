@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number to Finnish Text</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f0f8ff; /* Light blue background */
+            color: #003366; /* Dark blue text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff; /* White container background */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #00509e; /* Darker blue for heading */
+        }
+        input[type="number"] {
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #003366;
+            border-radius: 4px;
+            width: calc(100% - 22px); /* Adjust width considering padding and border */
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #00509e; /* Button color */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #003366; /* Darker shade on hover */
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f3fe; /* Light blue for result area */
+            border: 1px solid #b3d1ff; /* Border for result area */
+            border-radius: 4px;
+            min-height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Number to Finnish Text Converter</h1>
+        <input type="number" id="numberInput" placeholder="Enter a number">
+        <button id="convertButton">Convert</button>
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
