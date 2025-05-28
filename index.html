@@ -8,7 +8,7 @@
         body {
             font-family: sans-serif;
             background-color: #FFFFFF; /* Clean white background */
-            color: #003366; /* Dark blue text */
+            color: #002F6C; /* Official dark blue for text */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,46 +19,48 @@
             background-color: #ffffff; /* White container background */
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 47, 108, 0.3); /* Shadow themed with Finnish blue */
             text-align: center;
-            border: 3px solid #003366; /* Dark blue border for Finnish flag theme */
+            border: 5px solid #003580; /* Thicker, primary Finnish blue border */
         }
         h1 {
-            color: #00509e; /* Strong blue for heading */
+            color: #002F6C; /* Official dark blue for heading */
         }
         input[type="number"] {
             padding: 10px;
             margin-top: 10px;
-            border: 1px solid #b3d1ff; /* Lighter blue border */
+            border: 2px solid #DCE9F5; /* Very light blue, almost white-blue border */
             border-radius: 4px;
-            width: calc(100% - 22px); /* Adjust width considering padding and border */
-            transition: border-color 0.3s ease; /* Smooth transition for focus */
+            width: calc(100% - 24px); /* Adjust width considering 2px border */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
         }
         input[type="number"]:focus {
-            border-color: #00509e; /* Darker blue border on focus */
+            border-color: #003580; /* Primary Finnish blue on focus */
+            box-shadow: 0 0 5px rgba(0, 53, 128, 0.5); /* Shadow on focus */
             outline: none; /* Remove default focus outline */
         }
         button {
             padding: 10px 20px;
             margin-top: 20px;
-            background-color: #00509e; /* Primary Finnish flag blue */
-            color: white; /* White text */
-            border: none;
+            background-color: #003580; /* Primary Finnish blue */
+            color: #FFFFFF; /* White text */
+            border: 2px solid #002F6C; /* Slightly darker blue border for definition */
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         button:hover {
-            background-color: #003366; /* Slightly darker shade of blue on hover */
+            background-color: #002F6C; /* Darker blue on hover */
+            border-color: #002F6C; /* Maintain darker blue border on hover */
         }
         #result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #e7f3fe; /* Very light blue for result area */
-            border: 1px solid #00509e; /* Distinct blue border */
+            margin-top: 25px; /* Increased margin */
+            padding: 15px; /* Increased padding */
+            background-color: #F0F8FF; /* AliceBlue, very light clean blue */
+            border: 2px solid #003580; /* Primary Finnish blue border */
             border-radius: 4px;
             min-height: 30px;
-            color: #003366; /* Ensure dark blue text for readability */
+            color: #002F6C; /* Official dark blue text */
         }
     </style>
 </head>

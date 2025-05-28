@@ -58,68 +58,94 @@ function _prefix(n) {
 }
 
 // Main function to convert number to Finnish text
-// Mirrors Python's number_to_text function structure
+// Refactored to align with Python's iterative logic
 function numberToTextJS(n, spaces = true) {
     if (typeof n !== 'number' || !Number.isInteger(n) || n < MIN_SUPPORT || n >= MAX_SUPPORT) {
-        return "Virhe: Numeron täytyy olla positiivinen kokonaisluku ja pienempi kuin 10^18.";
+        // This error message is for the function's contract, validateAndConvert handles user-facing messages.
+        return "Virhe: Internal - Numeron täytyy olla positiivinen kokonaisluku ja pienempi kuin 10^18.";
     }
 
     if (n === 0) {
         return "nolla";
     }
 
-    let result_parts = []; // Store parts of the number text, will be joined later
-    const processingStack = [n]; // Stack to manage number parts to process
+    let result = "";
+    const processingStack = [n]; // Use as a LIFO stack
 
-    // Memoize sorted_power_values as it doesn't change
-    const sorted_power_values = Object.keys(powers_of_ten).map(Number).sort((a, b) => b - a); // Sort descending to find max_power easily
+    // Sort powers_of_ten keys numerically in ascending order to find max_power correctly
+    const sorted_power_keys = Object.keys(powers_of_ten).map(Number).sort((a, b) => a - b);
 
     while (processingStack.length > 0) {
-        let current_n = processingStack.shift(); // Process from left (largest part first) - like a queue here
+        let current_n = processingStack.pop(); // LIFO
+        
+        if (current_n === 0 && n !== 0) { // Skip processing for zero remainders that don't add to text
+            continue; 
+        }
+
+        let segment_text = ""; // Text for current_n
+        let remainder_after_max_power = 0; // Store remainder from this iteration if current_n >= 1000
 
         if (current_n < 1000) {
-            result_parts.push(_prefix(current_n));
+            segment_text = _prefix(current_n);
+            // No remainder_after_max_power for numbers < 1000 in this context
         } else {
             let max_power = 0;
-            // Find the largest power of ten that fits into current_n
-            for (const power_val of sorted_power_values) { // Iterate from largest (triljoona) down
-                if (power_val <= current_n) {
-                    max_power = power_val;
+            for (const key_val of sorted_power_keys) {
+                if (key_val <= current_n) {
+                    max_power = key_val;
+                } else {
                     break; 
                 }
             }
 
-            const count_of_max_power = Math.floor(current_n / max_power); // e.g., 2 for 2 million
-            const remainder_after_max_power = current_n % max_power; // e.g., 345678 for 12345678
+            const count_of_max_power = Math.floor(current_n / max_power);
+            remainder_after_max_power = current_n % max_power; 
 
-            let current_segment = "";
             if (count_of_max_power === 1) {
-                current_segment = powers_of_ten[max_power]; // "miljoona", "tuhat"
-            } else {
-                let prefix_for_power = _prefix(count_of_max_power); // "kaksi"
+                // "yksi" prefix for larger powers like "miljoona", "miljardi", etc.
+                // but not for "sata" or "tuhat", to match test case "yksitriljoona..."
+                if (max_power === 100 || max_power === 1000) {
+                    segment_text = powers_of_ten[max_power];
+                } else { 
+                    segment_text = _prefix(1) + powers_of_ten[max_power]; // e.g. "yksi" + "miljoona"
+                }
+            } else { // count_of_max_power > 1
+                let prefix_val = _prefix(count_of_max_power);
                 
-                // Python's specific space addition for exact multiples like "kaksi miljoonaa "
-                // `if spaces and remainder_after_max_power == 0 and current_n > 999999 and max_power != 1000 : prefix_for_power += " "`
+                // Crucial Python detail for spacing with exact multiples (e.g. "kaksi miljoonaa ")
                 if (spaces && remainder_after_max_power === 0 && current_n > 999999 && max_power !== 1000) {
-                    prefix_for_power += " "; 
+                    prefix_val += " "; 
                 }
 
-                let affix = "a"; // Default for "miljoonaa", "miljardiaa"
-                if (max_power === 1000) { // "tuhatta"
+                let affix = "a"; // Default for partitive: "miljoonaa", "miljardiaa", "sataa"
+                if (max_power === 1000) { // tuhat -> "tuhatta" (partitive)
                     affix = "ta";
                 }
-                current_segment = prefix_for_power + powers_of_ten[max_power] + affix;
-            }
-            result_parts.push(current_segment);
-
-            if (remainder_after_max_power > 0) {
-                processingStack.push(remainder_after_max_power); // Add remainder for further processing
+                segment_text = prefix_val + powers_of_ten[max_power] + affix;
             }
         }
-    }
 
-    // Join the parts with spaces if required
-    return result_parts.join(spaces ? " " : "").trim();
+        // Append the processed segment to the main result string
+        if (segment_text.length > 0) {
+            if (result.length > 0 && spaces && !result.endsWith(" ")) { 
+                result += " "; 
+            }
+            result += segment_text;
+        }
+        
+        // Handle remainder and its specific spacing instruction (Refactoring points 4.1.2, 4.1.3, 4.2.4, 4.2.5)
+        if (remainder_after_max_power > 0) {
+            // "If remainder_after_max_power > 0 and spaces is true, append a space to result."
+            // This space is added AFTER the current segment's text.
+            if (spaces && result.length > 0 && !result.endsWith(" ")) {
+                 // Check ensures space is meaningful (result has content and doesn't already end with a space from prefix_val)
+                result += " ";
+            }
+            processingStack.push(remainder_after_max_power); // Push remainder AFTER adding the space to result.
+        }
+    }
+    // Final trim as per instruction point 6.
+    return result.trim(); 
 }
 
 // Event listener setup
